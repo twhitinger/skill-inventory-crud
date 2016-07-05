@@ -36,14 +36,15 @@ class SkillInventoryTest < Minitest::Test
   end
 
   def test_update
+
     skill = skill_manager.update(current_skill_id, {:title =>"WTF", :description => "IDIOT"})
     assert_equal "WTF", skill_manager.find(current_skill_id).title
   end
 
   def test_destroy
-    skip
+
     skill_manager.destroy(current_skill_id)
-    assert_equal 2, skill_manager.find(current_skill_id)
+    assert_equal 2, current_skill_id.all.length
   end
 
 end
