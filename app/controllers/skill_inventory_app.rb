@@ -1,8 +1,6 @@
-require 'models/skill_inventory'
+require 'sqlite3'
 
 class SkillInventoryApp < Sinatra::Base
-  set :root, File.expand_path("..", __dir__)
-  set :method_override, true
 
   get '/' do
     erb :dashboard
@@ -43,7 +41,12 @@ class SkillInventoryApp < Sinatra::Base
   end
 
   def skill_manager
-    database = YAML::Store.new('db/skill_manager')
+    if ENV['RACK_ENV'] == 'test'
+      database = SQLite3::Database.new('db/skill_inventory_test.db')
+    else
+      database = SQLite3::Database.new('db/skill_inventory_development.db')
+    end
+    database.results_as_hash = true
     @skill_manager ||= SkillInventory.new(database)
   end
 end
